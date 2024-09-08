@@ -1,0 +1,64 @@
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: 'false'
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+#  wireguard-s2s:
+#    image: lscr.io/linuxserver/wireguard
+#    container_name: wireguard-s2s
+#    cap_add:
+#      - NET_ADMIN
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=Europe/Paris
+#      - INTERNAL_SUBNET=172.31.100.0
+#      - LOG_CONFS=true
+#      - PEERDNS=auto
+#      - PEERS=home
+#      - SERVER_ALLOWED_IPS_PEER_home="192.168.1.0/24"
+#      - PERSISTENTKEEPALIVE_PEERS=all
+#    ports:
+#      - 51820:51820/udp
+#    volumes:
+#      - s2s-config:/config
+#    restart: unless-stopped
+#    sysctls:
+#      - net.ipv4.conf.all.src_valid_mark=1
+#    networks:
+#      default:
+#        ipv4_address: 172.20.0.100
+
+  wireguard-cvpn:
+    image: lscr.io/linuxserver/wireguard
+    container_name: wireguard-cvpn
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - INTERNAL_SUBNET=192.168.210.0
+      - LOG_CONFS=true
+      - PEERDNS=auto
+      - PEERS=iphone
+      - PERSISTENTKEEPALIVE_PEERS=all
+    ports:
+      - 51821:51820/udp
+    volumes:
+      - cvpn-config:/config
+    restart: unless-stopped
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    networks:
+      default:
+        ipv4_address: 172.20.0.110
+
+volumes:
+  #  s2s-config:
+  cvpn-config:
