@@ -28,6 +28,10 @@ docker compose up -d
 if [ $? -eq 0 ]; then
 	echo "Docker Compose started successfully."
 
+	iface="br-"
+	iface+=$(`docker network ls | grep wg-docker | cut -d ' ' -f 1`)
+	echo "Docker interface is: ${iface}"
+
 	# Check and add routes for S2S
 	if [[ -n "$S2S_NETWORKS" ]]; then
 		add_routes "$S2S_IP" "$S2S_NETWORKS"
